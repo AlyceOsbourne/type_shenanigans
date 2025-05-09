@@ -1,6 +1,5 @@
-use crate::nouns::{Chest, Dwarf, Log};
+use crate::nouns::{Chest, Dwarf, Goblin, Log};
 use crate::object::Object;
-
 mod traits;
 mod nouns;
 mod object;
@@ -13,6 +12,10 @@ fn main() {
     let dead_dwarf = dwarf.die();
     let dwarf_skeleton = dead_dwarf.decay();
 
+    let goblin: Object<Goblin> = Object::new();
+    let dead_goblin = goblin.die();
+    let goblin_skeleton = dead_goblin.decay();
+
     let chest: Object<Chest> = Object::new();
     let locked_chest = chest.lock();
     let chest = locked_chest.unlock();
@@ -22,8 +25,4 @@ fn main() {
     let log: Object<Log> = Object::new();
     let burning_log = log.ignite();
     let burnt_log = burning_log.extinguish();
-
-    println!("{:?}", log);
-    println!("{:?}", burning_log);
-    println!("{:?}", burnt_log);
 }

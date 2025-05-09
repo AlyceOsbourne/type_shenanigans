@@ -1,5 +1,5 @@
 use crate::adjectives::Corpse;
-use crate::nouns::{Chest, Dwarf, Log};
+use crate::nouns::{Chest, Dwarf, Goblin, Log};
 use crate::object::Object;
 use crate::traits::{Burnable, Living, Lockable, Mineable, Openable, Rots};
 
@@ -10,7 +10,11 @@ impl Living for Object<Dwarf> {
         10.0
     }
 }
-
+impl Living for Object<Goblin> {
+    fn health(&self) -> f32 {
+        5.0
+    }
+}
 impl Mineable for Object<Log> {
     fn hardness(&self) -> u8 {
         1
