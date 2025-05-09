@@ -14,3 +14,4 @@ pub trait Burnable {
     fn burn_time(&self) -> f32;
 }
 pub trait Lockable {}
+pub trait Openable {}

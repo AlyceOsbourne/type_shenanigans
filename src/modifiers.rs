@@ -1,33 +1,36 @@
-use crate::adjectives::{Burning, Burnt, Corpse, Locked, Skeleton};
+use crate::adjectives::{Burning, Burnt, Corpse, Locked, Open, Skeleton};
 use crate::object::Object;
-use crate::traits::{Burnable, Living, Lockable, Rots};
-impl <T> Object<T> where Object<T>: Living {
-    pub fn die(&self) -> Object<Corpse<T>> {
-        Object::new()
-    }
+use crate::traits::{Burnable, Living, Lockable, Openable, Rots};
+
+macro_rules! transform {
+    (
+        $(#[$meta:meta])*
+        $fn_name:ident: $from:ty => $to:ty | $bound:ty: $trait_bound:path
+    ) => {
+        $(#[$meta])*
+        impl<T> Object<$from>
+        where
+            Object<$bound>: $trait_bound,
+        {
+            pub fn $fn_name(&self) -> Object<$to> {
+                Object::new()
+            }
+        }
+    };
 }
-impl <T> Object<Corpse<T>> where Object<Corpse<T>>: Rots {
-    pub fn decay(&self) -> Object<Skeleton<T>> {
-        Object::new()
-    }
-}
-impl <T> Object<T> where Object<T>: Lockable {
-    pub fn lock(&self) -> Object<Locked<T>> {
-        Object::new()
-    }
-}
-impl <T> Object<Locked<T>> where Object<T>: Lockable {
-    pub fn unlock(&self) -> Object<T>{
-        Object::new()
-    }
-}
-impl <T> Object<T> where Object<T>: Burnable {
-    pub(crate) fn ignite(&self) -> Object<Burning<T>> {
-        Object::new()
-    }
-}
-impl <T> Object<Burning<T>> where Object<T>: Burnable {
-    pub(crate) fn extinguish(&self) -> Object<Burnt<T>> {
-        Object::new()
-    }
-}
+
+transform!(die: T => Corpse<T> | T: Living);
+
+transform!(decay: Corpse<T> => Skeleton<T> | Corpse<T>: Rots);
+
+transform!(lock: T => Locked<T> | T: Lockable);
+
+transform!(unlock: Locked<T> => T | T: Lockable);
+
+transform!(ignite: T => Burning<T> | T: Burnable);
+
+transform!(extinguish: Burning<T> => Burnt<T> | T: Burnable);
+
+transform!(open: T => Open<T> | T: Openable);
+
+transform!(close: Open<T> => T | T: Openable);
