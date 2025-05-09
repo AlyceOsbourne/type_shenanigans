@@ -12,6 +12,12 @@ impl <T> Object<T> {
         }
     }
 }
+impl<T> Debug for Object<T> {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        let full = type_name::<T>();
+        write!(f, "Object<{}>", short_type_name(full))
+    }
+}
 fn short_type_name(full: &str) -> String {
     let mut out = String::new();
     let mut depth = 0;
@@ -70,11 +76,5 @@ fn short_type_name(full: &str) -> String {
     }
 
     out
-}
-impl<T> Debug for Object<T> {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        let full = type_name::<T>();
-        write!(f, "Object<{}>", short_type_name(full))
-    }
 }
 

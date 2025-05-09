@@ -16,6 +16,8 @@ fn main() {
     let chest: Object<Chest> = Object::new();
     let locked_chest = chest.lock();
     let chest = locked_chest.unlock();
+    let open_chest = chest.open();
+    let chest = open_chest.close();
 
     let log: Object<Log> = Object::new();
     let burning_log = log.ignite();
